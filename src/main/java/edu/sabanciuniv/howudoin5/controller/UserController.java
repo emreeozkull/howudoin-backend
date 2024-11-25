@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 @RestController
 public class UserController {
@@ -47,11 +48,8 @@ public class UserController {
     public String loginUser(@RequestBody UserEntity user1) {
         String username1 =  user1.getUsername();
         String password1 = user1.getPassword();
-        boolean isLogin =  userService.loginUser(username1, password1);
-        if (isLogin) {
-            return "login success";
-        }
-        else {return "login failed";}
+        String isLogin =  userService.loginUser(username1, password1);
+        return Objects.requireNonNullElse(isLogin, "login failed");
 
     }
 
@@ -60,10 +58,6 @@ public class UserController {
 
         UserEntity user1 = addFriendRequest.getUser();
         String friendUsername = addFriendRequest.getFriendUsername();
-
-//        String username1 =  user1.getUsername();
-//        String password1 = user1.getPassword();
-
 
         userService.addFriendRequest(user1, friendUsername);
         return "friend request added";

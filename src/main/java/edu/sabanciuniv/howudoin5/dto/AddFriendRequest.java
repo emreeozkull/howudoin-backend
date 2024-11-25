@@ -16,32 +16,4 @@ public class AddFriendRequest {
     private UserEntity user;
     private String friendUsername;
 
-
-    // made all by lombok
-
-    // Constructors
-    // public AddFriendRequest() {}
-
-//    public AddFriendRequest(UserEntity user, String friendUsername) {
-//        this.user = user;
-//        this.friendUsername = friendUsername;
-//    }
-
-//    // Getters and Setters
-//    public UserEntity getUser() {
-//        return user;
-//    }
-//
-//    public void setUser(UserEntity user) {
-//        this.user = user;
-//    }
-//
-//    public String getFriendUsername() {
-//        return friendUsername;
-//    }
-//
-//    public void setFriendUsername(String friendUsername) {
-//        this.friendUsername = friendUsername;
-//    }
-
 }

@@ -5,6 +5,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.springframework.data.annotation.Id;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @AllArgsConstructor
@@ -21,6 +22,9 @@ public class UserEntity {
         this.id = getId();
         this.username = name;
         this.password = s;
+        this.groups = new ArrayList<Integer>();
+        this.friends = new ArrayList<String>();
+        this.friend_requests = new ArrayList<String>();
     }
 
     List<Integer> groups ;

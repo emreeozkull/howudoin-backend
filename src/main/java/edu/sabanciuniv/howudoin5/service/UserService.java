@@ -2,10 +2,13 @@ package edu.sabanciuniv.howudoin5.service;
 
 import edu.sabanciuniv.howudoin5.models.UserEntity;
 import edu.sabanciuniv.howudoin5.repository.UserRepository;
+import edu.sabanciuniv.howudoin5.security.JwtService;
 import org.apache.catalina.User;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 
+import java.security.Key;
 import java.util.List;
 
 @Service
@@ -13,21 +16,27 @@ public class UserService {
 
     @Autowired
     UserRepository userRepository;
+
+    @Autowired
+    JwtService jwtService;
     
     
     public void createUser(UserEntity user1) {
         userRepository.save(user1);
     }
 
-    public boolean loginUser(String username, String password) {
+    public String loginUser(String username, String password) {
         UserEntity user1 ;
         user1 = userRepository.getUserEntityByUsername(username);
         if (user1 == null) {
-            return false;
+            return "false";
         }
         else if (!user1.getPassword().equals(password)) {
-            return false;
-        }else return true;
+            return "false";
+        }else
+        {
+            return jwtService.generateToken(user1);
+        }
     }
 
     public List<UserEntity> getAllUsers(){

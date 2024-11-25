@@ -32,7 +32,7 @@ public class MessagesController {
     @PostMapping() // change this to get mapping after auth imp.
     public List<Messages> getConversationHist(@RequestBody MessageRequest messageRequest ) {
         int id1,id2;
-        if (!userService.loginUser(messageRequest.getUsername(), messageRequest.getPassword())) {
+        if (userService.loginUser(messageRequest.getUsername(), messageRequest.getPassword()) == null) {
             return new ArrayList<>();
         } else {
             String username = messageRequest.getUsername();
@@ -55,7 +55,7 @@ public class MessagesController {
 
         String message = messageRequest.getMessage();
 
-        if (userService.loginUser(username, password)){
+        if (userService.loginUser(username, password) != null) {
             UserEntity user1 =  userService.getUserByUsername(username);
             int senderId = user1.getId();
 
