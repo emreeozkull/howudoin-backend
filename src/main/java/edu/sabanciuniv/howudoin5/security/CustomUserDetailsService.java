@@ -14,9 +14,11 @@ import java.util.Collections;
 public class CustomUserDetailsService implements UserDetailsService {
 
     private final UserRepository userRepository;
+    private final JwtService jwtService;
 
-    public CustomUserDetailsService(UserRepository userRepository) {
+    public CustomUserDetailsService(UserRepository userRepository, JwtService jwtService) {
         this.userRepository = userRepository;
+        this.jwtService = jwtService;
     }
 
     @Override
@@ -30,5 +32,10 @@ public class CustomUserDetailsService implements UserDetailsService {
                 .password(user.getPassword())
                 .authorities(Collections.emptyList()) // Add roles if any
                 .build();
+    }
+
+    public UserEntity loadUserByToken(String token) {
+        String username = jwtService.extractUsername(token);
+        return userRepository.getUserEntityByUsername(username);
     }
 }

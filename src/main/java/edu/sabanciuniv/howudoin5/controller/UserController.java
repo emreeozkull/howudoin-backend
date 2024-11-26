@@ -1,11 +1,12 @@
 package edu.sabanciuniv.howudoin5.controller;
 
-import edu.sabanciuniv.howudoin5.dto.AddFriendRequest;
-import edu.sabanciuniv.howudoin5.dto.AuthRequest;
 import edu.sabanciuniv.howudoin5.models.UserEntity;
+import edu.sabanciuniv.howudoin5.security.CustomUserDetailsService;
+import edu.sabanciuniv.howudoin5.security.JwtService;
 import edu.sabanciuniv.howudoin5.service.UserService;
-import org.apache.catalina.User;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpHeaders;
+import org.springframework.security.web.header.Header;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
@@ -17,6 +18,11 @@ public class UserController {
 
     @Autowired
     UserService userService;
+
+    @Autowired
+    CustomUserDetailsService customUserDetailsService;
+    @Autowired
+    private JwtService jwtService;
 
 
     @GetMapping("/get-all-users")
@@ -35,42 +41,36 @@ public class UserController {
         return ("user registered");
     }
 
-    @GetMapping ("/register/{name}")
-    public String registerUser(@PathVariable String name) {
-        UserEntity user1  = new UserEntity(name,"12eed");
-
-        userService.createUser(user1);
-        return ("user registered");
-    }
-
-
     @PostMapping("/login")
     public String loginUser(@RequestBody UserEntity user1) {
         String username1 =  user1.getUsername();
         String password1 = user1.getPassword();
         String isLogin =  userService.loginUser(username1, password1);
         return Objects.requireNonNullElse(isLogin, "login failed");
+    }
 
+    @PostMapping("/test-jwt")
+    public String testJwt(@RequestHeader HttpHeaders header) {
+        return Objects.requireNonNull(header.get("Authorization")).get(0).substring(7);
     }
 
     @PostMapping("/friends/add")
-    public String addFriend(@RequestBody AddFriendRequest addFriendRequest) {
+    public String addFriend(@RequestBody String friendUsername, @RequestHeader HttpHeaders header) {
 
-        UserEntity user1 = addFriendRequest.getUser();
-        String friendUsername = addFriendRequest.getFriendUsername();
+        String token = Objects.requireNonNull(header.get("Authorization")).get(0).substring(7);
+        UserEntity userByToken = customUserDetailsService.loadUserByToken(token);
 
-        userService.addFriendRequest(user1, friendUsername);
-        return "friend request added";
+        userService.addFriendRequest(userByToken, friendUsername);
+        return userByToken.getUsername() + " friend request to" + friendUsername ;
     }
 
 
     @PostMapping("/friends") // change this to get with header authentication
-    public List<UserEntity> getFriends(@RequestBody AuthRequest authRequest) {
-        String username =  authRequest.getUsername();
-        String password =  authRequest.getPassword();
+    public List<UserEntity> getFriends(@RequestHeader HttpHeaders header) {
 
-        UserEntity user1 = userService.getUserByUsername(username);
-        if (user1.getPassword().equals(password)) {
+        String token = Objects.requireNonNull(header.get("Authorization")).get(0).substring(7);
+        UserEntity user1 = customUserDetailsService.loadUserByToken(token);
+        if (user1.getUsername() != null) {
             List<String> userFriends =  user1.getFriends();
             List<UserEntity> friendList = new ArrayList<>();
             for (String friend : userFriends) {friendList.add(userService.getUserByUsername(friend));}
@@ -80,12 +80,12 @@ public class UserController {
     }
 
     @PostMapping("/friends/accept")
-    public String acceptFriend(@RequestBody AddFriendRequest addFriendRequest) {
-        UserEntity user1 = addFriendRequest.getUser();
-        String friendUsername = addFriendRequest.getFriendUsername();
+    public String acceptFriend(@RequestBody String friendUsername, @RequestHeader HttpHeaders header) {
+        UserEntity user1 = customUserDetailsService.loadUserByToken(Objects.requireNonNull(header.get("Authorization")).get(0).substring(7));
+
         String username = user1.getUsername();
         userService.addFriends(username, friendUsername);
-        return "friend" + friendUsername + " accepted";
+        return "friend " + friendUsername + " accepted by " + username;
     }
 
 
