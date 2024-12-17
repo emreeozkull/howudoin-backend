@@ -10,16 +10,13 @@ import lombok.Setter;
 @Getter
 @Setter
 public class MessageRequest {
-    private String username;
-    private String password;
 
-    private String friendUsername;
+    private String friendID;
     private String message;
 
 
-    MessageRequest(String username, String password, String friendUsername) {
-        this.username = username;
-        this.password = password;
-        this.friendUsername = friendUsername;
+    MessageRequest(String friendId) {
+
+        this.friendID = friendId;
     }
 }

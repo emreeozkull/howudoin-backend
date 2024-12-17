@@ -1,5 +1,6 @@
 package edu.sabanciuniv.howudoin5.controller;
 
+import edu.sabanciuniv.howudoin5.dto.FriendsApi;
 import edu.sabanciuniv.howudoin5.models.UserEntity;
 import edu.sabanciuniv.howudoin5.security.CustomUserDetailsService;
 import edu.sabanciuniv.howudoin5.security.JwtService;
@@ -37,7 +38,8 @@ public class UserController {
 
     @PostMapping("/register")
     public String registerUser(@RequestBody UserEntity user1) {
-        userService.createUser(user1);
+        UserEntity user2 = new UserEntity(user1.getUsername(), user1.getPassword());
+        userService.createUser(user2);
         return ("user registered");
     }
 
@@ -61,12 +63,12 @@ public class UserController {
         UserEntity userByToken = customUserDetailsService.loadUserByToken(token);
 
         userService.addFriendRequest(userByToken, friendUsername);
-        return userByToken.getUsername() + " friend request to" + friendUsername ;
+        return userByToken.getUsername() + " sent friend request to " + friendUsername ;
     }
 
 
-    @PostMapping("/friends") // change this to get with header authentication
-    public List<UserEntity> getFriends(@RequestHeader HttpHeaders header) {
+    @PostMapping("/friends")
+    public FriendsApi getFriends(@RequestHeader HttpHeaders header) {
 
         String token = Objects.requireNonNull(header.get("Authorization")).get(0).substring(7);
         UserEntity user1 = customUserDetailsService.loadUserByToken(token);
@@ -74,7 +76,11 @@ public class UserController {
             List<String> userFriends =  user1.getFriends();
             List<UserEntity> friendList = new ArrayList<>();
             for (String friend : userFriends) {friendList.add(userService.getUserByUsername(friend));}
-            return friendList;
+            FriendsApi friendsApi = new FriendsApi();
+            friendsApi.status = "success";
+            friendsApi.friendList = friendList;
+
+            return friendsApi;
         }
         else return null;
     }

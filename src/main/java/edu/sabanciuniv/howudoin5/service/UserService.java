@@ -47,6 +47,10 @@ public class UserService {
         return userRepository.getUserEntityByUsername(username);
     }
 
+    public UserEntity getUserById(String id) {
+        return userRepository.getUserEntityById(id);
+    }
+
     public void addFriendRequest(UserEntity user1, String friendUsername) {
         String username = user1.getUsername();
         UserEntity user2 = userRepository.getUserEntityByUsername(friendUsername);

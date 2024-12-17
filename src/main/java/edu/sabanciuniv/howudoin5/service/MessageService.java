@@ -16,7 +16,7 @@ public class MessageService {
 
     public void createMessage(Messages message) {massagesRepository.save(message);}
 
-    public Messages getMassageByIDs(int id1, int id2) {
+    public Messages getMassageByIDs(String id1, String id2) {
 
         List<Messages> massList =  massagesRepository.findAll();
         for (Messages m : massList) {
@@ -25,7 +25,7 @@ public class MessageService {
         return null;
     }
 
-    public void appendMassage(int id1, int id2, String content) {
+    public void appendMassage(String id1, String id2, String content) {
 //        Messages m1 = getMassageByIDs(id1,id2);
 //        m1.getMessages().add(content);
         //massagesRepository.save(m1);
@@ -34,7 +34,7 @@ public class MessageService {
         massagesRepository.save(mess);
     }
 
-    public List<Messages> getConversationHistory(int id1, int id2) {
+    public List<Messages> getConversationHistory(String id1, String id2) {
         List<Messages> conversation = new ArrayList<Messages>();
         List<Messages> massList =  massagesRepository.findAll();
         for (Messages m : massList) {

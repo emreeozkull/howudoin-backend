@@ -12,12 +12,12 @@ import java.util.List;
 @Data
 public class Messages {
 
-    private int senderId;
-    private int receiverId;
+    private String senderId;
+    private String receiverId;
 
     private String messages;
 
-    public Messages(int senderId, int receiverId, String message) {
+    public Messages(String senderId, String receiverId, String message) {
         this.senderId = senderId;
         this.receiverId = receiverId;
         this.messages = message;
