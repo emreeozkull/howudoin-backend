@@ -23,18 +23,24 @@ public class GroupService {
 
     public void create(GroupEntity group) {
         List<String> groupUserNames = group.getUserNames();
+        System.out.println("group user names:");
+        System.out.println(groupUserNames);
 
         groupRepository.save(group);
         for (String userName : groupUserNames) {
             UserEntity user = userService.getUserByUsername(userName);
-            List<String> groupsIdForUser = user.getGroups();
-            groupsIdForUser.add(group.getId());
-            System.out.println(group.getId());
+            if (user != null) {
+                List<String> groupsIdForUser = user.getGroups();
+                groupsIdForUser.add(group.getId());
+                user.setGroups(groupsIdForUser);
 
-            user.setGroups(groupsIdForUser);
-            System.out.println(groupsIdForUser);
-            System.out.println("user.setGroups " + user.toString());
-            userService.userRepository.save(user);
+                System.out.println("user.setGroups " + user.toString());
+                userService.userRepository.save(user);
+            }
+            else {
+                System.out.println("user not found:" + userName);
+            }
+
         }
     }
 

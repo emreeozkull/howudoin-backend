@@ -47,6 +47,8 @@ public class GroupController {
 
     @PostMapping("/create")
     public String createGroup(@RequestBody GroupEntity group, @RequestHeader HttpHeaders header) {
+        System.out.println("createGroup");
+        System.out.println(group);
 
         String groupNames = group.getGroupName();
         List<String> userNames = new ArrayList<String>(); //= group.getUserNames();
@@ -56,21 +58,14 @@ public class GroupController {
 
         // check if user entered it's friends
 
-        /*
-        List<String> usersFriendsId = userByToken.getFriends();
-        for (String userName : userNames) {
-            String usersId = userService.getUserByUsername(userName).getId();
-            if ( !usersFriendsId.contains(usersId)){
-                userNames.remove(userName);
-            }
-        }
-        */
 
         // make group add group user names typescript
 
         GroupEntity createdGroup = new GroupEntity();
         createdGroup.setGroupName(groupNames);
         userNames.add(userByToken.getUsername());
+        userNames.addAll(group.getUserNames());
+
         createdGroup.setUserNames(userNames);
 
         List<GroupMessage> groupMessages = new ArrayList<GroupMessage>();
