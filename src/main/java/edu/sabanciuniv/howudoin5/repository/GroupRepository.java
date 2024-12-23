@@ -4,5 +4,5 @@ import edu.sabanciuniv.howudoin5.models.GroupEntity;
 import org.springframework.data.mongodb.repository.MongoRepository;
 
 public interface GroupRepository extends MongoRepository<GroupEntity, String> {
-    GroupEntity getGroupEntityById(Long groupId);
+    GroupEntity getGroupEntityById(String groupId);
 }

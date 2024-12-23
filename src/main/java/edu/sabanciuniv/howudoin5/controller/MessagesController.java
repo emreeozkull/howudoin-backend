@@ -46,7 +46,6 @@ public class MessagesController {
         String id1 = userByToken.getId();
         String id2 = messageRequest.getFriendID();
 
-
         return messageService.getConversationHistory(id1,id2);
 
     }
@@ -68,12 +67,8 @@ public class MessagesController {
 
             if (userService.checkFriendsByUsername(username,friendUserName)) {
                 String receiverId = userService.getUserByUsername(friendUserName).getId();
-                if (messageService.getMassageByIDs(senderId,receiverId) != null) {
-                    messageService.appendMassage(senderId,receiverId,message);
-                }else {
                     Messages massage1 = new Messages(senderId,receiverId,message);
                     messageService.createMessage(massage1);
-                }
                 return "message sent to: " + receiverId ;
 
             }else return "there is no friend named " + friendUserName +" with " + username;

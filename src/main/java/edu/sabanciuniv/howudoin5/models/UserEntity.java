@@ -22,12 +22,12 @@ public class UserEntity {
         this.id = getId();
         this.username = name;
         this.password = s;
-        this.groups = new ArrayList<Integer>();
+        this.groups = new ArrayList<String>();
         this.friends = new ArrayList<String>();
         this.friend_requests = new ArrayList<String>();
     }
 
-    List<Integer> groups ;
+    List<String> groups ;
     List<String> friends;
     List<String> friend_requests;
 

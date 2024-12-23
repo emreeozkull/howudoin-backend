@@ -10,6 +10,6 @@ import lombok.Setter;
 @Getter
 @Setter
 public class GroupMessage {
-    private String sender;
-    private String message;
+    public String sender;
+    public String message;
 }

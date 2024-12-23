@@ -13,8 +13,8 @@ import java.util.List;
 @Getter
 public class GroupEntity {
 
-    private Long id;
-    public String GroupNames;
+    private String id;
+    public String GroupName;
     private List<String> userNames;
     private List<GroupMessage> groupMessages;
 

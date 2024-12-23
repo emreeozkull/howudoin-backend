@@ -65,6 +65,7 @@ public class UserService {
         UserEntity user2 = getUserByUsername(username2);
 
         user1.getFriends().add(username2);
+        user1.getFriend_requests().remove(username2);
         userRepository.save(user1);
 
         user2.getFriends().add(username1);
@@ -86,5 +87,9 @@ public class UserService {
             }
             return false;
         }
+    }
+
+    public List<String> getAllFriendRequests(UserEntity user1) {
+        return user1.getFriend_requests();
     }
 }

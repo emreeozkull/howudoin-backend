@@ -76,13 +76,18 @@ public class UserController {
             List<String> userFriends =  user1.getFriends();
             List<UserEntity> friendList = new ArrayList<>();
             for (String friend : userFriends) {friendList.add(userService.getUserByUsername(friend));}
+
             FriendsApi friendsApi = new FriendsApi();
             friendsApi.status = "success";
             friendsApi.friendList = friendList;
 
             return friendsApi;
         }
-        else return null;
+        else {
+            FriendsApi friendsApi = new FriendsApi();
+            friendsApi.status = "failure";
+            return friendsApi;
+        }
     }
 
     @PostMapping("/friends/accept")
@@ -94,6 +99,18 @@ public class UserController {
         return "friend " + friendUsername + " accepted by " + username;
     }
 
+    @PostMapping("/friends/getFriendRequests")
+    public List<String> getFriendRequests(@RequestHeader HttpHeaders header) {
+        String token = Objects.requireNonNull(header.get("Authorization")).get(0).substring(7);
+        UserEntity user1 = customUserDetailsService.loadUserByToken(token);
+        if (user1.getUsername() != null) {
+            return userService.getAllFriendRequests(user1);
+        }
+        else {
+            return null;
+        }
+
+    }
 
 
 }
