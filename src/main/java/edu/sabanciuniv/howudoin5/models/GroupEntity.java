@@ -3,6 +3,7 @@ package edu.sabanciuniv.howudoin5.models;
 import edu.sabanciuniv.howudoin5.dto.GroupMessage;
 import lombok.*;
 
+import java.time.LocalDate;
 import java.util.List;
 
 
@@ -17,5 +18,6 @@ public class GroupEntity {
     public String GroupName;
     private List<String> userNames;
     private List<GroupMessage> groupMessages;
+    public LocalDate creationDate;
 
 }

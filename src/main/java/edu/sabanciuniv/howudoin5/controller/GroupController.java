@@ -12,6 +12,7 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
@@ -56,22 +57,22 @@ public class GroupController {
         String token = Objects.requireNonNull(header.get("Authorization")).get(0).substring(7);
         UserEntity userByToken = customUserDetailsService.loadUserByToken(token);
 
+        userNames.add(userByToken.getUsername());
         // check if user entered it's friends
-
-
-        // make group add group user names typescript
+        for (String userName :group.getUserNames()){
+            if (userByToken.getFriends().contains(userName)){
+                userNames.add(userName);
+            }
+        }
 
         GroupEntity createdGroup = new GroupEntity();
         createdGroup.setGroupName(groupNames);
-        userNames.add(userByToken.getUsername());
-        userNames.addAll(group.getUserNames());
-
         createdGroup.setUserNames(userNames);
 
         List<GroupMessage> groupMessages = new ArrayList<GroupMessage>();
         createdGroup.setGroupMessages(groupMessages);
-
-
+        System.out.println("group creation localdate now: " + LocalDate.now());
+        createdGroup.creationDate = LocalDate.now();
         groupService.create(createdGroup);
         return "Successful Group named "+ group.GroupName + " created";
     }
